@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Path, Body, HTTPException
+from fastapi import FastAPI, Path, HTTPException
 from pydantic import BaseModel
 from typing import Annotated, List
 
@@ -22,7 +22,7 @@ async def get_users() -> List[User]:
 async def create_user(
         username: Annotated[str, Path(min_length=5, max_length=20, description="Enter username", example="Petya")],
         age: Annotated[int, Path(ge=18, le=120, description="Enter age", example="24")]) -> User:
-    current_index = len(users) + 1 if len(users) > 0 else 1
+    current_index = users[-1].id + 1 if len(users) > 0 else 1
     user = User(id=current_index, username=username, age=age)
     users.append(user)
     return user
